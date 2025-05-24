@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to My Retro Site</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: #000000;
+            font-family: "Comic Sans MS", cursive;
+            color: #00ff00;
+            overflow: hidden;
+        }
+        .container {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .nav-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            gap: 20px;
+        }
+        .nav-button {
+            padding: 10px 20px;
+            background: #000;
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            font-family: "Comic Sans MS", cursive;
+            cursor: pointer;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        /* Home button - Glitch effect */
+        .nav-home:hover {
+            animation: glitch 0.3s infinite;
+            text-shadow: 2px 0 #ff0000, -2px 0 #0000ff;
+        }
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+        /* Navigation button - Radar sweep */
+        .nav-navigation::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: linear-gradient(45deg, transparent 45%, #00ff00 49%, transparent 51%);
+            transform: rotate(0deg);
+            opacity: 0;
+        }
+        .nav-navigation:hover::before {
+            opacity: 0.5;
+            animation: radar 2s linear infinite;
+        }
+        @keyframes radar {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* About Us button - Matrix rain */
+        .nav-about {
+            position: relative;
+        }
+        .nav-about:hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, 
+                transparent 0%,
+                rgba(0, 255, 0, 0.3) 50%,
+                transparent 100%);
+            animation: matrix 1s linear infinite;
+        }
+        @keyframes matrix {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        /* Downloads button - Cyber pulse */
+        .nav-downloads:hover {
+            animation: pulse 1s infinite;
+            box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .welcome-text {
+            font-size: 48px;
+            text-align: center;
+            text-shadow: 0 0 10px #00ff00;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        .under-construction {
+            margin-top: 20px;
+        }
+        .counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #000000;
+            border: 2px solid #00ff00;
+            padding: 5px;
+            font-size: 12px;
+        }
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px #00ff00;
+            }
+            to {
+                text-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-container">
+        <a href="#" class="nav-button nav-home">Home</a>
+        <a href="#" class="nav-button nav-navigation">Navigation</a>
+        <a href="#" class="nav-button nav-about">About Us</a>
+        <a href="#" class="nav-button nav-downloads">Downloads</a>
+    </div>
+    <div class="container">
+        <canvas id="stars" class="stars"></canvas>
+        <div class="welcome-text">
+            WELCOME TO<br>MY CYBER SPACE
+        </div>
+        <div class="under-construction">
+            <img src="https://web.archive.org/web/20091027130842/http://hk.geocities.com/antmanreborn/under-construction.gif" alt="Under Construction">
+        </div>
+    </div>
+    <div class="counter">
+        Visitors: 000001
+    </div>
+    <script>
+        // Star field animation
+        const canvas = document.getElementById('stars');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        
+        const stars = [];
+        for(let i = 0; i < 200; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2,
+                speed: Math.random() * 3 + 1
+            });
+        }
+        
+        function animate() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#FFFFFF';
+            stars.forEach(star => {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                star.y += star.speed;
+                if(star.y > canvas.height) {
+                    star.y = 0;
+                    star.x = Math.random() * canvas.width;
+                }
+            });
+            
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+    </script>
+</body>
+</html> 
